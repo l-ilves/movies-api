@@ -7,7 +7,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const {startDatabase} = require('./database/mongo');
-const {insertMovie, getMovies, deleteMovie, updateMovie} = require('./database/movies');
+const {insertMovie, getMovies, getMovie, deleteMovie, updateMovie} = require('./database/movies');
 
 // defining the Express app
 const app = express();
@@ -24,24 +24,30 @@ app.use(cors());
 // adding morgan to log HTTP requests
 app.use(morgan('combined'));
 
-// replace the endpoint responsible for the GET requests
+// endpoint responsible for the GET requests
 app.get('/', async (req, res) => {
     res.send(await getMovies());
 });
 
+// endpoint to get a movie
+app.get('/:id', async(req, res) => {
+    res.send(await getMovie(req.params.id))
+})
+
+// endpoint to insert movie
 app.post('/', async (req, res) => {
     const newMovie = req.body;
     await insertMovie(newMovie);
     res.send({ message: 'New movie inserted.' });
   });
   
-  // endpoint to delete an movie
+  // endpoint to delete a movie
   app.delete('/:id', async (req, res) => {
     await deleteMovie(req.params.id);
     res.send({ message: 'Movie removed.' });
   });
   
-  // endpoint to update an movie
+  // endpoint to update a movie
   app.put('/:id', async (req, res) => {
     const updatedMovie = req.body;
     await updateMovie(req.params.id, updatedMovie);

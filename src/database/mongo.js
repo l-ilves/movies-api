@@ -5,8 +5,6 @@ const {MongoClient} = require('mongodb');
 let database = null;
 
 async function startDatabase() {
-//   const mongo = new MongoMemoryServer();
-//   const mongoDBURL = await mongo.getUri();
 const uri = "mongodb+srv://admin:admin@cluster0.ldvp1.mongodb.net/movies?retryWrites=true&w=majority"
 const client = new MongoClient(uri);
   const connection = await client.connect();

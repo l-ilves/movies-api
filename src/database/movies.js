@@ -16,6 +16,11 @@ async function insertMovie(movie) {
     return await database.collection(collectionName).find({}).toArray();
   }
 
+  async function getMovie(id) {
+    const database = await getDatabase();
+    return await database.collection(collectionName).find({_id: new ObjectID(id),}).toArray();
+  }
+
   async function deleteMovie(id) {
     const database = await getDatabase();
     await database.collection(collectionName).deleteOne({
@@ -39,6 +44,7 @@ async function insertMovie(movie) {
   module.exports = {
     insertMovie,
     getMovies,
+    getMovie,
     deleteMovie,
     updateMovie
   };
