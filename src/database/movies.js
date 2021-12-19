@@ -26,7 +26,7 @@ async function insertMovie(movie) {
   async function updateMovie(id, movie) {
     const database = await getDatabase();
     delete movie._id;
-    await database.collection(collectionName).update(
+    await database.collection(collectionName).updateOne(
       { _id: new ObjectID(id), },
       {
         $set: {

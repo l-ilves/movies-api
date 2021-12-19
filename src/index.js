@@ -50,8 +50,6 @@ app.post('/', async (req, res) => {
   
   // start the in-memory MongoDB instance
 startDatabase().then(async () => {
-    await insertMovie({title: 'Hello, now from the in-memory database!'});
-  
     // start the server
     app.listen(3001, async () => {
       console.log('listening on port 3001');
