@@ -8,6 +8,8 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const {startDatabase} = require('./database/mongo');
 const {insertMovie, getMovies, getMovie, deleteMovie, updateMovie} = require('./database/movies');
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
 
 // defining the Express app
 const app = express();
@@ -34,25 +36,43 @@ app.get('/:id', async(req, res) => {
     res.send(await getMovie(req.params.id))
 })
 
+const checkJwt = jwt({
+    secret: jwksRsa.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: `https://<AUTH0_DOMAIN>/.well-known/jwks.json`
+    }),
+  
+    // Validate the audience and the issuer.
+    audience: 'https://movies-api',
+    issuer: `https://lilves.us.auth0.com/`,
+    algorithms: ['RS256']
+  });
+  
+
 // endpoint to insert movie
+app.use(checkJwt);
 app.post('/', async (req, res) => {
     const newMovie = req.body;
     await insertMovie(newMovie);
     res.send({ message: 'New movie inserted.' });
   });
   
-  // endpoint to delete a movie
-  app.delete('/:id', async (req, res) => {
-    await deleteMovie(req.params.id);
-    res.send({ message: 'Movie removed.' });
-  });
+// endpoint to delete a movie
+app.use(checkJwt);
+app.delete('/:id', async (req, res) => {
+await deleteMovie(req.params.id);
+res.send({ message: 'Movie removed.' });
+});
   
-  // endpoint to update a movie
-  app.put('/:id', async (req, res) => {
-    const updatedMovie = req.body;
-    await updateMovie(req.params.id, updatedMovie);
-    res.send({ message: 'Movie updated.' });
-  });
+// endpoint to update a movie
+app.use(checkJwt);
+app.put('/:id', async (req, res) => {
+const updatedMovie = req.body;
+await updateMovie(req.params.id, updatedMovie);
+res.send({ message: 'Movie updated.' });
+});
   
   // start the in-memory MongoDB instance
 startDatabase().then(async () => {
