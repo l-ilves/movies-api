@@ -1,5 +1,6 @@
 // ./src/database/movies.js
 const {getDatabase} = require('./mongo');
+const {ObjectID} = require('mongodb');
 
 const collectionName = "movies-list";
 
@@ -14,8 +15,30 @@ async function insertMovie(movie) {
     const database = await getDatabase();
     return await database.collection(collectionName).find({}).toArray();
   }
+
+  async function deleteMovie(id) {
+    const database = await getDatabase();
+    await database.collection(collectionName).deleteOne({
+      _id: new ObjectID(id),
+    });
+  }
+  
+  async function updateMovie(id, movie) {
+    const database = await getDatabase();
+    delete movie._id;
+    await database.collection(collectionName).update(
+      { _id: new ObjectID(id), },
+      {
+        $set: {
+          ...movie,
+        },
+      },
+    );
+  }
   
   module.exports = {
     insertMovie,
     getMovies,
+    deleteMovie,
+    updateMovie
   };

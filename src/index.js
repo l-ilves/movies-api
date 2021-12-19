@@ -7,15 +7,10 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const {startDatabase} = require('./database/mongo');
-const {insertAd, getAds} = require('./database/ads');
+const {insertMovie, getMovies, deleteMovie, updateMovie} = require('./database/movies');
 
 // defining the Express app
 const app = express();
-
-// // defining an array to work as the database (temporary solution)
-// const ads = [
-//   {title: 'Hello, world (again)!'}
-// ];
 
 // adding Helmet to enhance your API's security
 app.use(helmet());
@@ -31,12 +26,12 @@ app.use(morgan('combined'));
 
 // replace the endpoint responsible for the GET requests
 app.get('/', async (req, res) => {
-    res.send(await getAds());
+    res.send(await getMovies());
 });
 
   // start the in-memory MongoDB instance
 startDatabase().then(async () => {
-    await insertAd({title: 'Hello, now from the in-memory database!'});
+    await insertMovie({title: 'Hello, now from the in-memory database!'});
   
     // start the server
     app.listen(3001, async () => {
