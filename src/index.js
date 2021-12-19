@@ -29,6 +29,25 @@ app.get('/', async (req, res) => {
     res.send(await getMovies());
 });
 
+app.post('/', async (req, res) => {
+    const newMovie = req.body;
+    await insertMovie(newMovie);
+    res.send({ message: 'New movie inserted.' });
+  });
+  
+  // endpoint to delete an movie
+  app.delete('/:id', async (req, res) => {
+    await deleteMovie(req.params.id);
+    res.send({ message: 'Movie removed.' });
+  });
+  
+  // endpoint to update an movie
+  app.put('/:id', async (req, res) => {
+    const updatedMovie = req.body;
+    await updateMovie(req.params.id, updatedMovie);
+    res.send({ message: 'Movie updated.' });
+  });
+  
   // start the in-memory MongoDB instance
 startDatabase().then(async () => {
     await insertMovie({title: 'Hello, now from the in-memory database!'});
