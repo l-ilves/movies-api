@@ -74,7 +74,7 @@ await updateMovie(req.params.id, updatedMovie);
 res.send({ message: 'Movie updated.' });
 });
   
-  // start the in-memory MongoDB instance
+  // start the MongoDB instance
 startDatabase().then(async () => {
     // start the server
     app.listen(3001, async () => {
