@@ -1,15 +1,15 @@
 // ./src/database/mongo.js
 const {MongoMemoryServer} = require('mongodb-memory-server');
 const {MongoClient} = require('mongodb');
-const {un, pw, db} = require('../../.env')
+require('dotenv').config();
 
 let database = null;
 
 async function startDatabase() {
-const uri = `mongodb+srv://${un}:${pw}@cluster0.ldvp1.mongodb.net/${db}?retryWrites=true&w=majority`
+const uri = `mongodb+srv://${process.env.un}:${process.env.pw}@cluster0.ldvp1.mongodb.net/${process.env.db}?retryWrites=true&w=majority`
 const client = new MongoClient(uri);
   const connection = await client.connect();
-  database = connection.db("movies");
+  database = connection.db(process.env.db);
 }
 
 async function getDatabase() {

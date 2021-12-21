@@ -6,10 +6,12 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const {startDatabase} = require('./database/mongo');
-const {insertMovie, getMovies, getMovie, deleteMovie, updateMovie} = require('./database/movies');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
+const {startDatabase} = require('./database/mongo');
+const {insertMovie, getMovies, getMovie, deleteMovie, updateMovie} = require('./database/movies');
+require('dotenv').config();
+
 
 // defining the Express app
 const app = express();
@@ -49,6 +51,7 @@ const checkJwt = jwt({
     issuer: `https://lilves.us.auth0.com/`,
     algorithms: ['RS256']
   });
+
   
 
 // endpoint to insert movie
