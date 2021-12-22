@@ -41,24 +41,24 @@ app.get('/:id', async(req, res) => {
     res.send(await getMovie(req.params.id))
 })
 
-const checkJwt = jwt({
-    secret: jwksRsa.expressJwtSecret({
-      cache: true,
-      rateLimit: true,
-      jwksRequestsPerMinute: 5,
-      jwksUri: `https://<AUTH0_DOMAIN>/.well-known/jwks.json`
-    }),
+// const checkJwt = jwt({
+//     secret: jwksRsa.expressJwtSecret({
+//       cache: true,
+//       rateLimit: true,
+//       jwksRequestsPerMinute: 5,
+//       jwksUri: `https://<AUTH0_DOMAIN>/.well-known/jwks.json`
+//     }),
   
-    // Validate the audience and the issuer.
-    audience: 'https://movies-api',
-    issuer: `https://lilves.us.auth0.com/`,
-    algorithms: ['RS256']
-  });
+//     // Validate the audience and the issuer.
+//     audience: 'https://movies-api',
+//     issuer: `https://lilves.us.auth0.com/`,
+//     algorithms: ['RS256']
+//   });
 
   
 
 // endpoint to insert movie
-app.use(checkJwt);
+// app.use(checkJwt);
 app.post('/', async (req, res) => {
     const newMovie = req.body;
     await insertMovie(newMovie);
@@ -66,14 +66,14 @@ app.post('/', async (req, res) => {
   });
   
 // endpoint to delete a movie
-app.use(checkJwt);
+// app.use(checkJwt);
 app.delete('/:id', async (req, res) => {
 await deleteMovie(req.params.id);
 res.send({ message: 'Movie removed.' });
 });
   
 // endpoint to update a movie
-app.use(checkJwt);
+// app.use(checkJwt);
 app.put('/:id', async (req, res) => {
 const updatedMovie = req.body;
 await updateMovie(req.params.id, updatedMovie);
