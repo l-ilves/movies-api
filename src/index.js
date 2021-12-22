@@ -1,6 +1,7 @@
 // ./src/index.js
 
 // importing the dependencies
+require('dotenv').config({path: '../env'});
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -10,7 +11,9 @@ const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 const {startDatabase} = require('./database/mongo');
 const {insertMovie, getMovies, getMovie, deleteMovie, updateMovie} = require('./database/movies');
-require('dotenv').config();
+// let _db_user = process.env.DB_USER;
+// let _db_pass = process.env.DB_PASS;
+// let _db = process.env.DB;
 
 
 // defining the Express app
@@ -79,6 +82,7 @@ res.send({ message: 'Movie updated.' });
   
   // start the MongoDB instance
 startDatabase().then(async () => {
+  console.log('~INDEX~ this is _db_user -> ', process.env.DB)
     // start the server
     app.listen(3001, async () => {
       console.log('listening on port 3001');
